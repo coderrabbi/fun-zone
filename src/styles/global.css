@@ -1142,6 +1142,7 @@ h1 > span {
 }
 .cinematic h2 {
   font-size: clamp(43px, 7vw, 110px);
+  font-weight: 700;
   line-height: 1.35;
   margin: 35px 0;
   transform-style: preserve-3d;
