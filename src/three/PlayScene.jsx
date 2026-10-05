@@ -3,9 +3,10 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { RoundedBox as DetailedBox, Float } from '@react-three/drei';
 import { useVisible, useMobileGraphics, usePageVisible } from '../hooks/usePreferences';
 import RenderBudget from './RenderBudget';
+import { sceneDpr } from './resolution';
 // Small scene props do not need dense bevel geometry on either screen size.
 function RoundedBox(props) {
-  return <DetailedBox {...props} smoothness={2} bevelSegments={1} />;
+  return <DetailedBox {...props} smoothness={4} bevelSegments={3} />;
 }
 function Machine({ position, color, rotation = 0 }) {
   return (
@@ -145,7 +146,7 @@ export default function PlayScene({ kind, reduced }) {
       {mounted && (
         <Canvas
           frameloop={!active ? 'never' : reduced || kind === 'arcade' ? 'demand' : 'always'}
-          dpr={mobile ? 1 : [1, 1.4]}
+          dpr={sceneDpr(mobile, window.devicePixelRatio)}
           camera={{ position: [0, 0, 6], fov: 43 }}
           gl={{ powerPreference: 'low-power', alpha: true, antialias: true }}
         >

@@ -51,6 +51,7 @@ Sites hosting metadata lives in `.openai/hosting.json`. It is independent of the
 
 ## Mobile graphics update
 
-Mobile and coarse-pointer devices use native momentum scrolling, 160 background particles, simplified rounded geometry, fewer lights, and a starting DPR of 1 with antialiasing. Sustained slow frames lower DPR to 0.85, then 0.7. The mobile background renders only around the hero and final portal. Local canvases are created on first visibility, pause offscreen and in hidden tabs, and the static arcade scene renders on demand.
+Mobile and coarse-pointer devices use native momentum scrolling, 160 background particles, smooth rounded geometry, fewer lights, and a clarity-preserving DPR of 1.5–2 with antialiasing. Frame-rate dips no longer lower the pixel resolution. The mobile background renders only around the hero and final portal. Local canvases are created on first visibility, pause offscreen and in hidden tabs, and the static arcade scene renders on demand.
 
 New cinematic effects include counter-rotating headset arcs, a GPU-driven portal streak field, perspective tunnel rings and racing light trails. Decorative CSS animations pause offscreen and all new effects respect reduced motion. Browser viewport checks do not substitute for measurements on a physical phone.
+

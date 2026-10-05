@@ -66,7 +66,7 @@ export function OrbitCage({ mobile, reduced, heroProgress }) {
       {[0, 1, 2].map((i) => (
         <mesh key={i} rotation={[1, 0, i]}>
           <torusGeometry
-            args={[1.9 + i * 0.2, 0.012, 5, mobile ? 40 : 80, Math.PI * (i === 1 ? 1.15 : 0.65)]}
+            args={[1.9 + i * 0.2, 0.012, 5, mobile ? 64 : 80, Math.PI * (i === 1 ? 1.15 : 0.65)]}
           />
           <meshBasicMaterial color={i === 1 ? '#bdff63' : '#b778ff'} transparent opacity={0.75} />
         </mesh>

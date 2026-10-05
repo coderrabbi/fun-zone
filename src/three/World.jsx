@@ -4,6 +4,7 @@ import { RoundedBox, Float } from '@react-three/drei';
 import * as THREE from 'three';
 import { useMobileGraphics, usePageVisible } from '../hooks/usePreferences';
 import RenderBudget from './RenderBudget';
+import { sceneDpr } from './resolution';
 import { WarpTunnel, OrbitCage } from './CinematicFX';
 function Ring({
   position = [0, 0, 0],
@@ -15,13 +16,13 @@ function Ring({
 }) {
   return (
     <mesh position={position} rotation={rotation}>
-      <torusGeometry args={[radius, tube, mobile ? 6 : 12, mobile ? 48 : 100]} />
+      <torusGeometry args={[radius, tube, mobile ? 10 : 12, mobile ? 80 : 100]} />
       <meshStandardMaterial color={color} emissive={color} emissiveIntensity={3} />
     </mesh>
   );
 }
 function Headset({ mobile }) {
-  const rounded = { smoothness: mobile ? 2 : 5, bevelSegments: mobile ? 1 : 4 };
+  const rounded = { smoothness: mobile ? 4 : 5, bevelSegments: mobile ? 3 : 4 };
   return (
     <group rotation={[0.15, -0.28, -0.13]}>
       <mesh position={[0, 0.13, -0.2]} rotation={[Math.PI / 2, 0, 0]} scale={[1, 0.75, 1]}>
@@ -81,8 +82,8 @@ function Controller({ mobile }) {
       <RoundedBox
         args={[0.85, 0.4, 0.25]}
         radius={0.16}
-        smoothness={mobile ? 2 : 4}
-        bevelSegments={mobile ? 1 : 4}
+        smoothness={4}
+        bevelSegments={mobile ? 3 : 4}
       >
         <meshStandardMaterial color="#e2d5ef" metalness={0.35} roughness={0.28} />
       </RoundedBox>
@@ -341,7 +342,7 @@ export default function World({ reduced }) {
       style={{ visibility: mobile && !inScene ? 'hidden' : 'visible' }}
     >
       <Canvas
-        dpr={mobile ? 1 : [1, 1.7]}
+        dpr={sceneDpr(mobile, window.devicePixelRatio)}
         frameloop={!active ? 'never' : reduced ? 'demand' : 'always'}
         camera={{ position: [0, 0, 7], fov: 45 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'low-power' }}
