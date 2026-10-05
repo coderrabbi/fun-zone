@@ -1,40 +1,44 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { RoundedBox, Float, AdaptiveDpr } from '@react-three/drei';
+import { RoundedBox, Float } from '@react-three/drei';
 import * as THREE from 'three';
+import { useMobileGraphics, usePageVisible } from '../hooks/usePreferences';
+import RenderBudget from './RenderBudget';
+import { WarpTunnel, OrbitCage } from './CinematicFX';
 function Ring({
   position = [0, 0, 0],
   rotation = [0, 0, 0],
   radius = 2,
   color = '#b777ff',
   tube = 0.015,
+  mobile = false,
 }) {
   return (
     <mesh position={position} rotation={rotation}>
-      <torusGeometry args={[radius, tube, 12, 100]} />
+      <torusGeometry args={[radius, tube, mobile ? 6 : 12, mobile ? 48 : 100]} />
       <meshStandardMaterial color={color} emissive={color} emissiveIntensity={3} />
     </mesh>
   );
 }
-function Headset() {
+function Headset({ mobile }) {
+  const rounded = { smoothness: mobile ? 2 : 5, bevelSegments: mobile ? 1 : 4 };
   return (
     <group rotation={[0.15, -0.28, -0.13]}>
       <mesh position={[0, 0.13, -0.2]} rotation={[Math.PI / 2, 0, 0]} scale={[1, 0.75, 1]}>
         <torusGeometry args={[1.03, 0.15, 12, 64, Math.PI * 1.65]} />
         <meshStandardMaterial color="#292333" roughness={0.4} metalness={0.6} />
       </mesh>
-      <RoundedBox args={[2.45, 1.25, 0.87]} radius={0.3} smoothness={5}>
+      <RoundedBox args={[2.45, 1.25, 0.87]} radius={0.3} {...rounded}>
         <meshStandardMaterial color="#ccc1dc" metalness={0.45} roughness={0.24} />
       </RoundedBox>
-      <RoundedBox
-        position={[0, 0.035, 0.47]}
-        args={[2.25, 1.06, 0.13]}
-        radius={0.28}
-        smoothness={5}
-      >
-        <meshPhysicalMaterial color="#170f2d" metalness={0.85} roughness={0.16} clearcoat={1} />
+      <RoundedBox position={[0, 0.035, 0.47]} args={[2.25, 1.06, 0.13]} radius={0.28} {...rounded}>
+        {mobile ? (
+          <meshStandardMaterial color="#170f2d" metalness={0.7} roughness={0.2} />
+        ) : (
+          <meshPhysicalMaterial color="#170f2d" metalness={0.85} roughness={0.16} clearcoat={1} />
+        )}
       </RoundedBox>
-      <RoundedBox position={[0, 0.015, 0.55]} args={[2.03, 0.85, 0.025]} radius={0.22}>
+      <RoundedBox position={[0, 0.015, 0.55]} args={[2.03, 0.85, 0.025]} radius={0.22} {...rounded}>
         <meshStandardMaterial color="#39205b" metalness={0.9} roughness={0.2} />
       </RoundedBox>
       <mesh position={[-0.73, 0.16, 0.58]}>
@@ -45,7 +49,12 @@ function Headset() {
         <sphereGeometry args={[0.095, 20, 16]} />
         <meshStandardMaterial color="#0a0815" metalness={0.7} roughness={0.05} />
       </mesh>
-      <RoundedBox position={[0, -0.29, 0.58]} args={[1.13, 0.022, 0.016]} radius={0.008}>
+      <RoundedBox
+        position={[0, -0.29, 0.58]}
+        args={[1.13, 0.022, 0.016]}
+        radius={0.008}
+        {...rounded}
+      >
         <meshStandardMaterial color="#be94ff" emissive="#985eff" emissiveIntensity={5} />
       </RoundedBox>
       {[-1, 1].map((s) => (
@@ -54,6 +63,7 @@ function Headset() {
           position={[s * 1.24, 0.05, -0.05]}
           args={[0.15, 0.56, 0.5]}
           radius={0.07}
+          {...rounded}
         >
           <meshStandardMaterial color="#ddd5e7" metalness={0.35} roughness={0.3} />
         </RoundedBox>
@@ -65,10 +75,15 @@ function Headset() {
     </group>
   );
 }
-function Controller() {
+function Controller({ mobile }) {
   return (
     <group rotation={[0.2, 0.2, -0.3]}>
-      <RoundedBox args={[0.85, 0.4, 0.25]} radius={0.16}>
+      <RoundedBox
+        args={[0.85, 0.4, 0.25]}
+        radius={0.16}
+        smoothness={mobile ? 2 : 4}
+        bevelSegments={mobile ? 1 : 4}
+      >
         <meshStandardMaterial color="#e2d5ef" metalness={0.35} roughness={0.28} />
       </RoundedBox>
       {[-1, 1].map((s) => (
@@ -108,10 +123,11 @@ function Scene({ reduced, mobile }) {
     portal = useRef(),
     dust = useRef();
   const progress = useRef(0),
+    heroProgress = useRef(0),
     velocity = useRef(0),
     burst = useRef(0),
     pointer = useRef({ x: 0, y: 0 });
-  const count = reduced ? 150 : mobile ? 450 : 2000;
+  const count = reduced ? 80 : mobile ? 160 : 2000;
   const positions = useMemo(() => {
     let a = new Float32Array(count * 3);
     let seed = 19;
@@ -141,22 +157,24 @@ function Scene({ reduced, mobile }) {
         y: 1 - (e.clientY / innerHeight) * 2,
       };
     };
-    addEventListener('pointermove', move, { passive: true });
+    if (!mobile) addEventListener('pointermove', move, { passive: true });
     const click = () => {
       burst.current = 1;
     };
     addEventListener('scroll', f, { passive: true });
-    addEventListener('pointerdown', click);
+    if (!mobile) addEventListener('pointerdown', click);
+    f();
     return () => {
       removeEventListener('scroll', f);
       removeEventListener('pointerdown', click);
       removeEventListener('pointermove', move);
     };
-  }, []);
+  }, [mobile, invalidate]);
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime,
       p = progress.current;
     const heroP = Math.min(scrollY / innerHeight, 1);
+    heroProgress.current = heroP;
     const end = Math.max(0, (p - 0.85) / 0.15);
     const k = 1 - Math.exp(-delta * 4);
     if (headset.current) {
@@ -166,19 +184,19 @@ function Scene({ reduced, mobile }) {
         mobile ? 0.75 : 1.05,
         k,
       );
-      headset.current.position.z = reduced ? 0 : heroP * 3;
+      headset.current.position.z = reduced || mobile ? 0 : heroP * 3;
       headset.current.rotation.y = THREE.MathUtils.lerp(
         headset.current.rotation.y,
         reduced ? 0 : pointer.current.x * 0.18 + heroP * 0.8,
         k,
       );
       headset.current.rotation.x = reduced ? 0 : pointer.current.y * -0.1;
-      headset.current.scale.setScalar(mobile ? 0.85 : 1.2);
+      headset.current.scale.setScalar(mobile ? 0.72 : 1.2);
     }
     if (objects.current) {
       objects.current.visible = heroP < 1;
       objects.current.rotation.z = reduced ? 0 : Math.sin(t * 0.18) * 0.08;
-      objects.current.scale.setScalar(1 + heroP * 0.9);
+      objects.current.scale.setScalar(mobile ? 0.85 : 1 + heroP * 0.9);
     }
     if (portal.current) {
       portal.current.visible = heroP > 0.5;
@@ -194,7 +212,7 @@ function Scene({ reduced, mobile }) {
       dust.current.rotation.y = reduced ? 0 : t * 0.015 + pointer.current.x * 0.018;
       dust.current.position.y = reduced ? 0 : -p * 2;
       dust.current.scale.y = reduced ? 1 : 1 + velocity.current + burst.current * 0.035;
-      if (!reduced) {
+      if (!reduced && !mobile) {
         const coords = dust.current.geometry.attributes.position;
         const px = pointer.current.x * 6,
           py = pointer.current.y * 4;
@@ -225,10 +243,12 @@ function Scene({ reduced, mobile }) {
   return (
     <>
       <ambientLight intensity={1.3} />
+      <OrbitCage mobile={mobile} reduced={reduced} heroProgress={heroProgress} />
+      <WarpTunnel mobile={mobile} reduced={reduced} progress={progress} />
       <directionalLight position={[3, 5, 4]} intensity={3} color="#e6d3ff" />
       <pointLight position={[-4, 2, 2]} intensity={35} color="#9144ff" />
-      <pointLight position={[4, -1, 3]} intensity={25} color="#51c7ff" />
-      <pointLight position={[0, 4, -3]} intensity={40} color="#ff73b9" />
+      {!mobile && <pointLight position={[4, -1, 3]} intensity={25} color="#51c7ff" />}
+      {!mobile && <pointLight position={[0, 4, -3]} intensity={40} color="#ff73b9" />}
       <points ref={dust}>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[positions, 3]} />
@@ -248,7 +268,7 @@ function Scene({ reduced, mobile }) {
           rotationIntensity={reduced ? 0 : 0.12}
           floatIntensity={reduced ? 0 : 0.3}
         >
-          <Headset />
+          <Headset mobile={mobile} />
         </Float>
       </group>
       <group ref={objects}>
@@ -257,11 +277,11 @@ function Scene({ reduced, mobile }) {
           scale={mobile ? 0.65 : 1}
         >
           <Float speed={reduced ? 0 : 2} floatIntensity={0.4}>
-            <Controller />
+            <Controller mobile={mobile} />
           </Float>
         </group>
         <group position={[mobile ? 1.4 : 2.8, 1.85, -0.7]} rotation={[0.4, 0.6, 0.3]}>
-          <Ring radius={mobile ? 0.25 : 0.38} color="#bdff63" tube={0.07} />
+          <Ring radius={mobile ? 0.25 : 0.38} color="#bdff63" tube={0.07} mobile={mobile} />
         </group>
         <mesh
           position={[mobile ? 1.5 : 2.45, mobile ? -0.15 : -0.15, 0]}
@@ -277,18 +297,19 @@ function Scene({ reduced, mobile }) {
           />
         </mesh>
         <group position={[0, 1, -1]} rotation={[0.9, 0.1, -0.25]}>
-          <Ring radius={mobile ? 1.85 : 2.65} color="#9b5bff" tube={0.009} />
-          <Ring radius={mobile ? 1.95 : 2.8} color="#4c306b" tube={0.006} />
+          <Ring radius={mobile ? 1.85 : 2.65} color="#9b5bff" tube={0.009} mobile={mobile} />
+          {!mobile && <Ring radius={2.8} color="#4c306b" tube={0.006} />}
         </group>
       </group>
       <group ref={portal} position={[0, 0, -5]}>
-        {[0, 1, 2, 3, 4].map((i) => (
+        {(mobile ? [0, 1, 2] : [0, 1, 2, 3, 4]).map((i) => (
           <Ring
             key={i}
             radius={2 + i * 0.2}
             position={[0, 0, -i * 0.4]}
             color={i % 2 ? '#6954ea' : '#b06fff'}
             tube={i === 0 ? 0.045 : 0.014}
+            mobile={mobile}
           />
         ))}
       </group>
@@ -296,24 +317,38 @@ function Scene({ reduced, mobile }) {
   );
 }
 export default function World({ reduced }) {
-  const [visible, setVisible] = useState(!document.hidden);
-  const mobile = matchMedia('(max-width: 760px)').matches;
+  const visible = usePageVisible();
+  const mobile = useMobileGraphics();
+  const [inScene, setInScene] = useState(true);
   useEffect(() => {
-    const f = () => setVisible(!document.hidden);
-    document.addEventListener('visibilitychange', f);
-    return () => document.removeEventListener('visibilitychange', f);
+    const intersecting = new Set();
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) intersecting.add(entry.target);
+        else intersecting.delete(entry.target);
+      });
+      setInScene(intersecting.size > 0);
+    });
+    document.querySelectorAll('#home, .finale').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
+  const active = visible && (!mobile || inScene);
   return (
-    <div className="world" aria-hidden="true">
+    <div
+      className="world"
+      aria-hidden="true"
+      data-active={active}
+      style={{ visibility: mobile && !inScene ? 'hidden' : 'visible' }}
+    >
       <Canvas
-        dpr={[1, mobile ? 1.25 : 1.7]}
-        frameloop={!visible ? 'never' : reduced ? 'demand' : 'always'}
+        dpr={mobile ? 1 : [1, 1.7]}
+        frameloop={!active ? 'never' : reduced ? 'demand' : 'always'}
         camera={{ position: [0, 0, 7], fov: 45 }}
-        gl={{ antialias: !mobile, alpha: true, powerPreference: 'low-power' }}
+        gl={{ antialias: true, alpha: true, powerPreference: 'low-power' }}
         fallback={<div className="scene-fallback" />}
       >
         <Scene reduced={reduced} mobile={mobile} />
-        <AdaptiveDpr pixelated />
+        <RenderBudget mobile={mobile} active={active} />
       </Canvas>
     </div>
   );

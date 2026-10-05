@@ -1,7 +1,12 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { RoundedBox, Float } from '@react-three/drei';
-import { useVisible } from '../hooks/usePreferences';
+import { RoundedBox as DetailedBox, Float } from '@react-three/drei';
+import { useVisible, useMobileGraphics, usePageVisible } from '../hooks/usePreferences';
+import RenderBudget from './RenderBudget';
+// Small scene props do not need dense bevel geometry on either screen size.
+function RoundedBox(props) {
+  return <DetailedBox {...props} smoothness={2} bevelSegments={1} />;
+}
 function Machine({ position, color, rotation = 0 }) {
   return (
     <group position={position} rotation={[0, rotation, 0]}>
@@ -122,29 +127,45 @@ function KidsShapes({ reduced }) {
 export default function PlayScene({ kind, reduced }) {
   const ref = useRef();
   const visible = useVisible(ref);
+  const pageVisible = usePageVisible();
+  const mobile = useMobileGraphics();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    if (visible) setMounted(true);
+  }, [visible]);
+  const active = visible && pageVisible;
   return (
-    <div ref={ref} className="play-canvas" aria-hidden="true">
-      <Canvas
-        frameloop={!visible ? 'never' : reduced ? 'demand' : 'always'}
-        dpr={[1, 1.4]}
-        camera={{ position: [0, 0, 6], fov: 43 }}
-        gl={{ powerPreference: 'low-power', alpha: true }}
-      >
-        <ambientLight intensity={1.6} />
-        <directionalLight position={[3, 4, 5]} intensity={3} />
-        <pointLight position={[-3, 1, 3]} color="#b777ff" intensity={25} />
-        {kind === 'arcade' ? (
-          <group position={[0, 0.1, 0]}>
-            <Machine position={[-1.2, 0, -0.55]} color="#98e7ff" rotation={0.3} />
-            <Machine position={[0, 0, 0]} color="#c188ff" />
-            <Machine position={[1.2, 0, -0.55]} color="#ff8aac" rotation={-0.3} />
-          </group>
-        ) : kind === 'racing' ? (
-          <Wheel reduced={reduced} />
-        ) : (
-          <KidsShapes reduced={reduced} />
-        )}
-      </Canvas>
+    <div
+      ref={ref}
+      className="play-canvas"
+      aria-hidden="true"
+      data-active={active}
+      data-scene={kind}
+    >
+      {mounted && (
+        <Canvas
+          frameloop={!active ? 'never' : reduced || kind === 'arcade' ? 'demand' : 'always'}
+          dpr={mobile ? 1 : [1, 1.4]}
+          camera={{ position: [0, 0, 6], fov: 43 }}
+          gl={{ powerPreference: 'low-power', alpha: true, antialias: true }}
+        >
+          <ambientLight intensity={1.6} />
+          <directionalLight position={[3, 4, 5]} intensity={3} />
+          <pointLight position={[-3, 1, 3]} color="#b777ff" intensity={25} />
+          <RenderBudget mobile={mobile} active={active && kind !== 'arcade'} />
+          {kind === 'arcade' ? (
+            <group position={[0, 0.1, 0]}>
+              <Machine position={[-1.2, 0, -0.55]} color="#98e7ff" rotation={0.3} />
+              <Machine position={[0, 0, 0]} color="#c188ff" />
+              <Machine position={[1.2, 0, -0.55]} color="#ff8aac" rotation={-0.3} />
+            </group>
+          ) : kind === 'racing' ? (
+            <Wheel reduced={reduced} />
+          ) : (
+            <KidsShapes reduced={reduced} />
+          )}
+        </Canvas>
+      )}
     </div>
   );
 }

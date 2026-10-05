@@ -13,7 +13,7 @@ export default function VR({ reduced }) {
   const drag = useRef(null);
   useLayoutEffect(() => {
     const mm = gsap.matchMedia();
-    mm.add('(min-width: 900px)', () => {
+    mm.add('(min-width: 1025px) and (pointer: fine)', () => {
       if (reduced) return;
       const ctx = gsap.context(() => {
         timeline.current = gsap.to(track.current, {
@@ -35,7 +35,11 @@ export default function VR({ reduced }) {
     return () => mm.revert();
   }, [reduced]);
   const select = (i) => {
-    if (timeline.current?.scrollTrigger && !reduced && innerWidth >= 900) {
+    if (
+      timeline.current?.scrollTrigger &&
+      !reduced &&
+      matchMedia('(min-width: 1025px) and (pointer: fine)').matches
+    ) {
       const st = timeline.current.scrollTrigger;
       window.scrollTo({ top: st.start + ((st.end - st.start) * i) / 6, behavior: 'instant' });
     } else {
@@ -66,7 +70,7 @@ export default function VR({ reduced }) {
           ref={track}
           data-cursor="DRAG"
           onScroll={(event) => {
-            if (innerWidth < 900 || reduced) {
+            if (!matchMedia('(min-width: 1025px) and (pointer: fine)').matches || reduced) {
               const el = event.currentTarget;
               setActive(Math.min(6, Math.round(el.scrollLeft / (el.children[0].offsetWidth + 15))));
             }
@@ -80,7 +84,7 @@ export default function VR({ reduced }) {
             if (!drag.current) return;
             const distance = drag.current.x - event.clientX;
             const st = timeline.current?.scrollTrigger;
-            if (st && !reduced && innerWidth >= 900) {
+            if (st && !reduced && matchMedia('(min-width: 1025px) and (pointer: fine)').matches) {
               window.scrollTo({
                 top: Math.max(st.start, Math.min(st.end, drag.current.scroll + distance)),
                 behavior: 'instant',

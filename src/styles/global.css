@@ -2121,3 +2121,137 @@ footer > a:last-child {
     opacity: 1 !important;
   }
 }
+/* Compositor-only cinematic effects: transforms/opacity, paused offscreen. */
+.cinema-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  perspective: 700px;
+  z-index: 0;
+  contain: paint;
+}
+.cinema-layer i {
+  position: absolute;
+  display: block;
+  animation-play-state: paused !important;
+}
+.cinema-layer[data-running='true'] i {
+  animation-play-state: running !important;
+}
+.cinematic > h2,
+.cinematic > .tiny-label,
+.cinematic-cross,
+.finale > h2,
+.finale > .eyebrow,
+.finale > p,
+.finale > .button {
+  position: relative;
+  z-index: 1;
+}
+.cinema-tunnel i,
+.cinema-portal i {
+  left: 50%;
+  top: 50%;
+  width: min(68vw, 660px);
+  aspect-ratio: 1;
+  border: 1px solid #af75ff55;
+  border-radius: 24%;
+  transform: translate(-50%, -50%) rotate(calc(var(--i) * 15deg));
+  animation: dimension-pulse 8s linear infinite;
+  animation-delay: calc(var(--i) * -1.33s);
+}
+.cinema-portal i {
+  border-radius: 50%;
+  border-color: #ba85ff45;
+  animation-duration: 10s;
+  animation-delay: calc(var(--i) * -1.66s);
+}
+.cinema-speed i {
+  height: 2px;
+  width: 25%;
+  left: 50%;
+  top: calc(15% + var(--i) * 8%);
+  background: linear-gradient(90deg, transparent, #beff6baa, transparent);
+  transform-origin: left;
+  animation: light-rush 2.6s linear infinite;
+  animation-delay: calc(var(--i) * -0.26s);
+}
+@keyframes dimension-pulse {
+  0% {
+    transform: translate(-50%, -50%) translateZ(-550px) rotate(calc(var(--i) * 15deg));
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate(-50%, -50%) translateZ(320px) rotate(calc(var(--i) * 15deg + 50deg));
+    opacity: 0;
+  }
+}
+@keyframes light-rush {
+  0% {
+    transform: rotate(calc(var(--i) * 9deg - 40deg)) translateX(-50px) scaleX(0.2);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: rotate(calc(var(--i) * 9deg - 40deg)) translateX(700px) scaleX(2);
+    opacity: 0;
+  }
+}
+@media (max-width: 1024px), (pointer: coarse) {
+  .nav.scrolled {
+    backdrop-filter: none;
+    background: #0b0915f5;
+  }
+  .card-icon,
+  .benefit,
+  .arcade-panel {
+    backdrop-filter: none;
+    background-color: #171021e8;
+  }
+  .experience-card:after {
+    display: none;
+  }
+  .tilt {
+    transform: none !important;
+  }
+  .speed-road {
+    background-position: 0 0 !important;
+  }
+  .journey-track {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    will-change: auto;
+  }
+  .journey {
+    scroll-snap-align: start;
+  }
+  .cinema-layer i:nth-child(n + 4) {
+    display: none;
+  }
+  .cinema-tunnel i,
+  .cinema-portal i {
+    animation-duration: 10s;
+    animation-delay: calc(var(--i) * -3.33s);
+    width: 85vw;
+  }
+  .review-track {
+    animation-duration: 65s;
+  }
+  .hero {
+    background: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cinema-layer {
+    display: none;
+  }
+}

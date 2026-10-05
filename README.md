@@ -48,3 +48,9 @@ The gallery uses explicitly labelled illustrative stock images. Replace these wi
 The site has been built and checked locally. Device-specific frame rates depend on graphics hardware; 60 FPS is a target, not a guarantee. No physical-device thermal or prolonged frame-rate benchmark is claimed.
 
 Sites hosting metadata lives in `.openai/hosting.json`. It is independent of the static site's runtime; remove that directory when moving the source to another hosting service if desired. Image credits and source links are in `ASSET-CREDITS.md`.
+
+## Mobile graphics update
+
+Mobile and coarse-pointer devices use native momentum scrolling, 160 background particles, simplified rounded geometry, fewer lights, and a starting DPR of 1 with antialiasing. Sustained slow frames lower DPR to 0.85, then 0.7. The mobile background renders only around the hero and final portal. Local canvases are created on first visibility, pause offscreen and in hidden tabs, and the static arcade scene renders on demand.
+
+New cinematic effects include counter-rotating headset arcs, a GPU-driven portal streak field, perspective tunnel rings and racing light trails. Decorative CSS animations pause offscreen and all new effects respect reduced motion. Browser viewport checks do not substitute for measurements on a physical phone.

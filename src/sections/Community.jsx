@@ -1,3 +1,4 @@
+import CinematicLayer from '../components/CinematicLayer';
 import { useEffect, useRef, useState } from 'react';
 import {
   ShieldCheck,
@@ -89,6 +90,7 @@ export function Why() {
 export function Cinematic() {
   return (
     <section className="cinematic section">
+      <CinematicLayer />
       <span className="tiny-label">THIS IS YOUR PORTAL</span>
       <h2>
         {['স্ক্রিনে নয়—', 'এবার গেমের', 'ভেতরে প্রবেশ করুন।'].map((w, i) => (
@@ -267,6 +269,7 @@ export function Finale() {
   return (
     <>
       <section className="finale section">
+        <CinematicLayer kind="portal" />
         <Eyebrow>STEP INTO SOMETHING EXTRAORDINARY</Eyebrow>
         <h2>
           Ready To

@@ -1,3 +1,4 @@
+import CinematicLayer from '../components/CinematicLayer';
 import SceneBoundary from '../components/SceneBoundary';
 import { useState, lazy, Suspense } from 'react';
 import {
@@ -127,6 +128,7 @@ export function Racing({ reduced }) {
   return (
     <section id="racing" className="section racing-section" tabIndex={-1}>
       <div className="speed-road" aria-hidden="true" />
+      <CinematicLayer kind="speed" />
       <div className="racing-copy reveal">
         <Eyebrow>NO BRAKES. JUST THRILLS.</Eyebrow>
         <h2>
