@@ -201,11 +201,54 @@ function Scene({ reduced, mobile }) {
     }
     if (portal.current) {
       portal.current.visible = heroP > 0.5;
-      portal.current.rotation.z = reduced ? 0 : t * 0.09;
-      portal.current.position.z = reduced ? -3 : -6 + p * 7;
-      portal.current.scale.setScalar(0.75 + end * 0.4);
-      portal.current.position.x = Math.sin(p * Math.PI * 4) * (mobile ? 0.3 : 1.4);
-      portal.current.children.forEach((ring) => {
+      // Damped transforms follow scroll in both directions without rebuilding geometry.
+      const follow = reduced ? 1 : 1 - Math.exp(-Math.min(delta, 0.05) * 5);
+      const phase = p * Math.PI * 6;
+      const amplitude = mobile ? 0.55 : 1;
+      portal.current.rotation.x = THREE.MathUtils.lerp(
+        portal.current.rotation.x,
+        reduced ? 0 : Math.sin(phase) * 0.3 * amplitude,
+        follow,
+      );
+      portal.current.rotation.y = THREE.MathUtils.lerp(
+        portal.current.rotation.y,
+        reduced ? 0 : Math.cos(phase * 0.7) * 0.38 * amplitude,
+        follow,
+      );
+      portal.current.rotation.z = THREE.MathUtils.lerp(
+        portal.current.rotation.z,
+        reduced ? 0 : p * 1.8 + Math.sin(t * 0.15) * 0.07,
+        follow,
+      );
+      portal.current.position.z = THREE.MathUtils.lerp(
+        portal.current.position.z,
+        reduced ? -3 : -6 + p * 7,
+        follow,
+      );
+      portal.current.position.x = THREE.MathUtils.lerp(
+        portal.current.position.x,
+        reduced ? 0 : Math.sin(p * Math.PI * 4) * (mobile ? 0.3 : 1.4),
+        follow,
+      );
+      portal.current.position.y = THREE.MathUtils.lerp(
+        portal.current.position.y,
+        reduced ? 0 : Math.sin(phase * 0.6) * 0.4 * amplitude,
+        follow,
+      );
+      const size = 0.72 + end * 0.3 + (reduced ? 0 : Math.sin(phase) * 0.05);
+      portal.current.scale.setScalar(THREE.MathUtils.lerp(portal.current.scale.x, size, follow));
+      portal.current.children.forEach((ring, i) => {
+        const spread = reduced ? 0 : Math.sin(phase + i * 0.45);
+        ring.rotation.x = THREE.MathUtils.lerp(ring.rotation.x, spread * 0.13 * amplitude, follow);
+        ring.rotation.y = THREE.MathUtils.lerp(
+          ring.rotation.y,
+          reduced ? 0 : Math.cos(phase + i * 0.5) * 0.15 * amplitude,
+          follow,
+        );
+        ring.position.z = THREE.MathUtils.lerp(ring.position.z, -i * (0.65 + spread * 0.1), follow);
+        const stretch = reduced ? 0 : Math.sin(phase + i * 0.35) * 0.055 * amplitude;
+        ring.scale.x = THREE.MathUtils.lerp(ring.scale.x, 1 + stretch, follow);
+        ring.scale.y = THREE.MathUtils.lerp(ring.scale.y, 1 - stretch, follow);
         ring.material.emissiveIntensity = 2 + end * 4;
       });
     }
@@ -306,8 +349,8 @@ function Scene({ reduced, mobile }) {
         {(mobile ? [0, 1, 2] : [0, 1, 2, 3, 4]).map((i) => (
           <Ring
             key={i}
-            radius={2 + i * 0.2}
-            position={[0, 0, -i * 0.4]}
+            radius={2 + i * 0.46}
+            position={[0, 0, -i * 0.65]}
             color={i % 2 ? '#6954ea' : '#b06fff'}
             tube={i === 0 ? 0.045 : 0.014}
             mobile={mobile}
