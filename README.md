@@ -55,3 +55,4 @@ Mobile and coarse-pointer devices use native momentum scrolling, 160 background 
 
 New cinematic effects include counter-rotating headset arcs, a GPU-driven portal streak field, perspective tunnel rings and racing light trails. Decorative CSS animations pause offscreen and all new effects respect reduced motion. Browser viewport checks do not substitute for measurements on a physical phone.
 
+# fun-zone
