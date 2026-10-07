@@ -1,4 +1,4 @@
-# FUN ZONE
+# Bakerganj FunVerse
 
 A Bangla-first, fully static entertainment website with React, Vite, Three.js, React Three Fiber, Drei, GSAP/ScrollTrigger, Framer Motion, Lenis, Tailwind CSS and Lucide.
 

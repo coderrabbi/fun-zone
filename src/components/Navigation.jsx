@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { Menu, X, Gamepad2 } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 const links = [
   ['হোম', 'home'],
   ['এক্সপেরিয়েন্স', 'experiences'],
   ['VR', 'vr'],
-  ['Arcade', 'arcade'],
-  ['Kids Zone', 'kids'],
+  ['Arcade · Soon', 'arcade'],
+  ['Kids · Soon', 'kids'],
   ['গ্যালারি', 'gallery'],
   ['যোগাযোগ', 'visit'],
 ];
@@ -52,11 +52,11 @@ export default function Navigation() {
   return (
     <>
       <header className={'nav ' + (scrolled ? 'scrolled' : '')}>
-        <a href="#home" className="brand" aria-label="FUN ZONE হোম">
-          <Gamepad2 />
-          <span>
-            FUN<span className="lime">ZONE</span>
-            <i>BEYOND THE ORDINARY</i>
+        <a href="#home" className="brand" aria-label="Bakerganj FunVerse হোম">
+          <img className="brand-logo" src="/brand/logo.png" alt="" width="52" height="52" />
+          <span className="brand-wordmark">
+            <small>BAKERGANJ</small>FUN<span className="lime">VERSE</span>
+            <i>VR EXPERIENCE ZONE</i>
           </span>
         </a>
         <nav aria-label="প্রধান নেভিগেশন" className="desktop-nav">

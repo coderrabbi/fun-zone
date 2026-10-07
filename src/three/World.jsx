@@ -10,7 +10,7 @@ function Ring({
   position = [0, 0, 0],
   rotation = [0, 0, 0],
   radius = 2,
-  color = '#b777ff',
+  color = '#39bfff',
   tube = 0.015,
   mobile = false,
 }) {
@@ -56,7 +56,7 @@ function Headset({ mobile }) {
         radius={0.008}
         {...rounded}
       >
-        <meshStandardMaterial color="#be94ff" emissive="#985eff" emissiveIntensity={5} />
+        <meshStandardMaterial color="#a1eaff" emissive="#008cff" emissiveIntensity={5} />
       </RoundedBox>
       {[-1, 1].map((s) => (
         <RoundedBox
@@ -71,7 +71,7 @@ function Headset({ mobile }) {
       ))}
       <mesh position={[0, 0.48, 0.57]}>
         <boxGeometry args={[0.22, 0.027, 0.013]} />
-        <meshBasicMaterial color="#bdff63" />
+        <meshBasicMaterial color="#29d9ff" />
       </mesh>
     </group>
   );
@@ -290,7 +290,7 @@ function Scene({ reduced, mobile }) {
       <OrbitCage mobile={mobile} reduced={reduced} heroProgress={heroProgress} />
       <WarpTunnel mobile={mobile} reduced={reduced} progress={progress} />
       <directionalLight position={[3, 5, 4]} intensity={3} color="#e6d3ff" />
-      <pointLight position={[-4, 2, 2]} intensity={35} color="#9144ff" />
+      <pointLight position={[-4, 2, 2]} intensity={35} color="#168dff" />
       {!mobile && <pointLight position={[4, -1, 3]} intensity={25} color="#51c7ff" />}
       {!mobile && <pointLight position={[0, 4, -3]} intensity={40} color="#ff73b9" />}
       <points ref={dust}>
@@ -299,7 +299,7 @@ function Scene({ reduced, mobile }) {
         </bufferGeometry>
         <pointsMaterial
           size={mobile ? 0.018 : 0.022}
-          color="#bca0ed"
+          color="#76d9ff"
           transparent
           opacity={0.48}
           sizeAttenuation
@@ -325,7 +325,7 @@ function Scene({ reduced, mobile }) {
           </Float>
         </group>
         <group position={[mobile ? 1.4 : 2.8, 1.85, -0.7]} rotation={[0.4, 0.6, 0.3]}>
-          <Ring radius={mobile ? 0.25 : 0.38} color="#bdff63" tube={0.07} mobile={mobile} />
+          <Ring radius={mobile ? 0.25 : 0.38} color="#29d9ff" tube={0.07} mobile={mobile} />
         </group>
         <mesh
           position={[mobile ? 1.5 : 2.45, mobile ? -0.15 : -0.15, 0]}

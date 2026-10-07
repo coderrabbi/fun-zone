@@ -1,9 +1,9 @@
 export const business = {
-  name: 'FUN ZONE',
+  name: 'Bakerganj FunVerse',
   price: 50,
   duration: 5,
-  address: '',
-  hours: '',
+  address: 'সাহেবগঞ্জ বেড়িবাঁধ, বাকেরগঞ্জ, বরিশাল',
+  hours: 'শুক্রবার ও শনিবার, বিকেল ৩টা থেকে রাত ৮টা',
   phone: '',
   mapUrl: '',
 };
@@ -148,8 +148,8 @@ export const reviews = [
 ];
 export const benefits = [
   'আধুনিক VR প্রযুক্তি',
-  'বিভিন্ন ধরনের গেম',
-  'শিশুদের জন্য নিরাপদ পরিবেশ',
+  'বিভিন্ন VR অভিজ্ঞতা',
+  'Kids Zone — Coming Soon',
   'বন্ধু ও পরিবারের সাথে আনন্দ',
   'পরিচ্ছন্ন সরঞ্জাম',
   'সাশ্রয়ী মূল্য',

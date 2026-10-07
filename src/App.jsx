@@ -28,6 +28,21 @@ export default function App() {
       </SceneBoundary>
       <main>
         <Hero />
+        <section className="brand-cover" aria-label="Bakerganj FunVerse — Step into a new reality">
+          <img
+            src="/brand/cover.png"
+            alt="Bakerganj FunVerse VR Experience Zone: ডাইনোসর, সমুদ্র ও রোলার কোস্টারের অ্যাডভেঞ্চার"
+            width="2056"
+            height="765"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="cover-details">
+            <span>সাহেবগঞ্জ বেড়িবাঁধ · বাকেরগঞ্জ, বরিশাল</span>
+            <span>শুক্রবার ও শনিবার · বিকেল ৩টা–রাত ৮টা</span>
+            <a href="#visit">ভিজিট করুন ↗</a>
+          </div>
+        </section>
         <div className="ticker" aria-hidden="true">
           <span>REAL FUN</span>
           <i>✳</i>
@@ -35,7 +50,7 @@ export default function App() {
           <i>✳</i>
           <span>PLAY BEYOND LIMITS</span>
           <i>✳</i>
-          <span>FUN ZONE</span>
+          <span>Bakerganj FunVerse</span>
         </div>
         <Experiences />
         <VR reduced={reduced} />

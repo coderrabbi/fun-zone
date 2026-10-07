@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Glasses } from 'lucide-react';
+
 export function Loader() {
   const [progress, setProgress] = useState(0);
   const [done, setDone] = useState(false);
@@ -21,10 +21,10 @@ export function Loader() {
     };
   }, []);
   return done ? null : (
-    <div className="loader" role="status" aria-label="FUN ZONE লোড হচ্ছে">
-      <Glasses size={44} />
+    <div className="loader" role="status" aria-label="Bakerganj FunVerse লোড হচ্ছে">
+      <img className="loader-logo" src="/brand/logo.png" alt="" width="112" height="112" />
       <strong>
-        FUN<span>ZONE</span>
+        <small>BAKERGANJ</small> FUN<span>VERSE</span>
       </strong>
       <div className="loader-line">
         <i style={{ width: progress + '%' }} />

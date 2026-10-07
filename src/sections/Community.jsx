@@ -28,7 +28,7 @@ export function Stats({ reduced }) {
         const start = performance.now();
         const tick = (now) => {
           const p = reduced ? 1 : Math.min((now - start) / 1000, 1);
-          setCount(Math.round(10 * (1 - (1 - p) ** 3)));
+          setCount(Math.round(7 * (1 - (1 - p) ** 3)));
           if (p < 1) frame = requestAnimationFrame(tick);
         };
         frame = requestAnimationFrame(tick);
@@ -45,12 +45,12 @@ export function Stats({ reduced }) {
     <section className="stats section" ref={ref}>
       <div>
         <strong>{count.toLocaleString('bn-BD')}+</strong>
-        <span>এক্সপেরিয়েন্স</span>
+        <span>VR এক্সপেরিয়েন্স</span>
       </div>
       <div>
         <Glasses />
-        <strong className="stat-text">VR + Arcade</strong>
-        <span>সাথে Kids Zone</span>
+        <strong className="stat-text">VR এখন চালু</strong>
+        <span>অন্যান্য অ্যাক্টিভিটি Coming Soon</span>
       </div>
       <div>
         <Users />
@@ -70,7 +70,7 @@ export function Why() {
   return (
     <section className="section why-section">
       <SectionTitle eyebrow="MORE THAN JUST A PLAY ZONE">
-        কেন <span className="english">FUN ZONE?</span>
+        কেন <span className="english">Bakerganj FunVerse?</span>
       </SectionTitle>
       <div className="benefit-grid">
         {benefits.map((b, i) => {
@@ -116,7 +116,7 @@ export function Gallery() {
     <section className="section gallery-section" id="gallery" tabIndex={-1}>
       <div className="section-heading-row">
         <SectionTitle eyebrow="COLLECT MOMENTS, NOT JUST SCORES">
-          FUN ZONE-এর
+          Bakerganj FunVerse-এর
           <br />
           <span className="soft">কিছু মুহূর্ত</span>
         </SectionTitle>
@@ -200,7 +200,7 @@ export function Visit() {
         <SectionTitle eyebrow="YOUR NEXT GOOD DAY STARTS HERE">
           আজই চলে আসুন
           <br />
-          <span className="soft">FUN ZONE-এ</span>
+          <span className="soft">Bakerganj FunVerse-এ</span>
         </SectionTitle>
         <div className="contact-list">
           <div>
@@ -221,7 +221,7 @@ export function Visit() {
             <Phone />
             <span>
               <small>মোবাইল</small>
-              {business.phone || '[Phone Number]'}
+              {business.phone || 'শীঘ্রই যুক্ত হবে'}
             </span>
           </div>
         </div>
@@ -247,19 +247,19 @@ export function Visit() {
         </div>
         {!configured && (
           <p className="asset-note" id="contact-note">
-            ঠিকানা ও ফোন নম্বর শীঘ্রই যুক্ত হবে।
+            ফোন নম্বর ও ম্যাপের পিন শীঘ্রই যুক্ত হবে।
           </p>
         )}
       </div>
       <div className="map-placeholder">
         <div className="map-grid" />
         <MapPin size={44} />
-        <strong>FUN ZONE</strong>
-        <span>[Map Placeholder]</span>
+        <strong>Bakerganj FunVerse</strong>
+        <span>সাহেবগঞ্জ বেড়িবাঁধ</span>
         <p>
-          পরবর্তী অ্যাডভেঞ্চারের ঠিকানা
+          বাকেরগঞ্জ, বরিশাল
           <br />
-          শীঘ্রই এখানে পাবেন।
+          শুক্রবার ও শনিবার · বিকেল ৩টা–রাত ৮টা
         </p>
       </div>
     </section>
@@ -278,15 +278,18 @@ export function Finale() {
         </h2>
         <p>নতুন এক দুনিয়া আপনার জন্য অপেক্ষা করছে।</p>
         <a href="#visit" className="button">
-          FUN ZONE-এ চলে আসুন
+          Bakerganj FunVerse-এ চলে আসুন
         </a>
       </section>
       <footer>
         <a className="brand" href="#home">
-          FUN<span className="lime">ZONE</span>
+          <img className="brand-logo" src="/brand/logo.png" alt="" width="52" height="52" />
+          <span className="brand-wordmark">
+            <small>BAKERGANJ</small>FUN<span className="lime">VERSE</span>
+          </span>
         </a>
         <span>রোমাঞ্চ শুরু এখানেই।</span>
-        <small>© {new Date().getFullYear()} FUN ZONE</small>
+        <small>© {new Date().getFullYear()} Bakerganj FunVerse</small>
         <a href="#home">উপরে ফিরে যান</a>
       </footer>
     </>

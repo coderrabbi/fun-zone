@@ -59,11 +59,12 @@ export function Arcade({ reduced }) {
       <div className="grid-floor" aria-hidden="true" />
       <div className="arcade-layout">
         <div>
-          <SectionTitle eyebrow="INSERT COIN. MAKE MEMORIES.">গেম শুরু হবে?</SectionTitle>
+          <span className="availability-badge">COMING SOON</span>
+          <SectionTitle eyebrow="ARCADE GAMES">আর্কেড আসছে শীঘ্রই</SectionTitle>
           <p className="section-description">
             হাই স্কোর, বন্ধুত্বপূর্ণ চ্যালেঞ্জ আর একের পর এক গেম।
             <br />
-            আপনার ভেতরের প্লেয়ারকে জাগিয়ে তুলুন।
+            আর্কেড গেমস এখনো চালু হয়নি।
           </p>
           <div className="game-tabs" role="tablist" aria-label="আর্কেড গেম">
             {games.map((g, i) => {
@@ -117,7 +118,7 @@ export function Arcade({ reduced }) {
           >
             <span className="tiny-label">{games[active].name.toUpperCase()}</span>
             <h3>{games[active].bn}</h3>
-            <p>{games[active].desc}</p>
+            <p>Coming Soon — এই গেমটি এখনো চালু হয়নি।</p>
           </div>
         </div>
       </div>
@@ -130,7 +131,8 @@ export function Racing({ reduced }) {
       <div className="speed-road" aria-hidden="true" />
       <CinematicLayer kind="speed" />
       <div className="racing-copy reveal">
-        <Eyebrow>NO BRAKES. JUST THRILLS.</Eyebrow>
+        <span className="availability-badge">COMING SOON</span>
+        <Eyebrow>RACING ZONE</Eyebrow>
         <h2>
           স্পিড
           <br />
@@ -139,11 +141,9 @@ export function Racing({ reduced }) {
         <p>
           প্রতিটি বাঁকে চ্যালেঞ্জ। প্রতিটি ল্যাপে রোমাঞ্চ।
           <br />
-          আপনার রেসিং গল্পটা শুরু হোক এখানেই।
+          রেসিং জোন আসছে শীঘ্রই।
         </p>
-        <a href="#visit" className="button outline">
-          <Flag size={18} /> রেসের জন্য প্রস্তুত?
-        </a>
+        <span className="coming-note">এখনো চালু হয়নি</span>
       </div>
       <div className="wheel-scene">
         <SceneBoundary>
@@ -167,7 +167,8 @@ export function Kids({ reduced }) {
         </SceneBoundary>
       </div>
       <div className="kids-copy reveal">
-        <Eyebrow>SMALL EXPLORERS. BIG SMILES.</Eyebrow>
+        <span className="availability-badge">COMING SOON</span>
+        <Eyebrow>KIDS ZONE</Eyebrow>
         <h2>
           ছোট্টদের আনন্দের
           <br />
@@ -185,9 +186,7 @@ export function Kids({ reduced }) {
             <Heart size={18} /> সুন্দর স্মৃতি
           </span>
         </div>
-        <a href="#visit" className="button">
-          ছোট্টদের নিয়ে চলে আসুন
-        </a>
+        <span className="coming-note">Kids Zone আসছে শীঘ্রই — এখনো চালু হয়নি</span>
       </div>
     </section>
   );

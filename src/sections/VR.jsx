@@ -178,7 +178,7 @@ export function Price() {
       </div>
       <h2>{business.duration.toLocaleString('bn-BD')} মিনিটের VR Experience</h2>
       <a href="#visit" className="text-link">
-        দেখা হবে FUN ZONE-এ
+        দেখা হবে Bakerganj FunVerse-এ
       </a>
     </section>
   );

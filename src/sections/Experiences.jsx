@@ -21,7 +21,7 @@ export default function Experiences() {
         <p className="section-aside">
           এক জায়গায়, আনন্দের অনেক দুনিয়া।
           <br />
-          আজ কোনটা দিয়ে শুরু করবেন?
+          VR এখন চালু। বাকি অ্যাক্টিভিটি আসছে শীঘ্রই।
         </p>
       </div>
       <div className="experience-grid">
@@ -29,12 +29,12 @@ export default function Experiences() {
           const Icon = icons[s.icon];
           return (
             <Tilt
-              as="a"
-              href={s.link}
+              as={s.id === 'vr' ? 'a' : 'article'}
+              href={s.id === 'vr' ? s.link : undefined}
               key={s.id}
               className={'experience-card reveal card-' + s.id}
               style={{ '--accent': s.color }}
-              data-cursor="দেখুন"
+              data-cursor={s.id === 'vr' ? 'দেখুন' : undefined}
             >
               {s.image ? (
                 <img src={images[s.image]} alt="" loading="lazy" width="800" height="600" />
@@ -56,12 +56,13 @@ export default function Experiences() {
                 <span>0{i + 1}</span>
               </div>
               <div className="card-content">
+                <span className="availability-badge">
+                  {s.id === 'vr' ? 'NOW OPEN · এখন চালু' : 'COMING SOON'}
+                </span>
                 <span className="tiny-label">{s.label}</span>
                 <h3>{s.name}</h3>
                 <p>{s.bn}</p>
-                <span className="card-more">
-                  <Plus size={20} />
-                </span>
+                <span className="card-more">{s.id === 'vr' && <Plus size={20} />}</span>
               </div>
             </Tilt>
           );

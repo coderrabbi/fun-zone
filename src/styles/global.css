@@ -4,7 +4,7 @@
   color: #f6f4fc;
   background: #080713;
   font-synthesis: none;
-  --lime: #bdff63;
+  --lime: #29d9ff;
   --muted: #aaa7bc;
   --line: rgba(255, 255, 255, 0.13);
 }
@@ -43,7 +43,7 @@ a:focus-visible {
   outline-offset: 6px;
 }
 ::selection {
-  background: #adff4f;
+  background: #29d9ff;
   color: #111;
 }
 button {
@@ -159,7 +159,7 @@ section:focus {
     transform 0.25s;
 }
 .button:hover {
-  box-shadow: 0 0 32px #bdff6330;
+  box-shadow: 0 0 32px #29d9ff30;
   transform: translateY(-3px);
 }
 .button.small {
@@ -303,7 +303,7 @@ h1 {
   letter-spacing: -1px;
 }
 h1 > span {
-  color: #d3b8fc;
+  color: #8bdcff;
 }
 .hero-copy p {
   font-size: 17px;
@@ -854,7 +854,7 @@ h1 > span {
   font-size: clamp(130px, 15vw, 230px);
   font-weight: 600;
   display: block;
-  color: #c9a1ff;
+  color: #69cfff;
   text-shadow: 0 0 65px #9762db50;
 }
 .price-section h2 {
@@ -919,7 +919,7 @@ h1 > span {
 }
 .game-tabs button[aria-selected='true'] {
   color: var(--lime);
-  background: linear-gradient(90deg, #bdff630b, transparent);
+  background: linear-gradient(90deg, #29d9ff0b, transparent);
 }
 .tab-index {
   margin-left: auto;
@@ -2255,4 +2255,122 @@ footer > a:last-child {
   .cinema-layer {
     display: none;
   }
+}
+
+/* Bakerganj FunVerse identity */
+.brand .brand-logo {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: contain;
+}
+.brand-wordmark {
+  line-height: 1;
+  white-space: nowrap;
+}
+.brand-wordmark small {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  margin-bottom: 5px;
+  color: #bceaff;
+}
+.brand-wordmark i {
+  font-size: 8px;
+  letter-spacing: 0.17em;
+  margin-top: 6px;
+}
+.loader .loader-logo {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+}
+.loader strong small {
+  display: block;
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  text-align: center;
+}
+.brand-cover {
+  margin: 0 auto;
+  width: min(1440px, 92%);
+  overflow: hidden;
+  border: 1px solid #29d9ff44;
+  border-radius: 20px;
+  background: #030d1e;
+}
+.brand-cover > img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.cover-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 28px;
+  color: #c7edff;
+  font-size: 16px;
+}
+.cover-details a {
+  color: #29d9ff;
+  white-space: nowrap;
+  font-weight: 700;
+}
+.visit-section .soft {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1100px) {
+  .nav .brand {
+    gap: 8px;
+    font-size: 20px;
+  }
+  .nav .brand-logo {
+    width: 44px;
+    height: 44px;
+  }
+}
+@media (max-width: 600px) {
+  .brand-cover {
+    width: 94%;
+    border-radius: 12px;
+  }
+  .cover-details {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px;
+    font-size: 14px;
+  }
+  .brand-wordmark small {
+    font-size: 8px;
+  }
+  .nav .brand-wordmark i {
+    font-size: 7px;
+  }
+}
+
+.availability-badge {
+  display: block;
+  width: fit-content;
+  padding: 7px 12px;
+  margin-bottom: 14px;
+  border: 1px solid #29d9ff88;
+  border-radius: 999px;
+  background: #041628;
+  color: #8deaff;
+  font:
+    700 11px/1.4 'Space Grotesk',
+    sans-serif;
+  letter-spacing: 0.1em;
+}
+.coming-note {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: #8deaff;
 }
