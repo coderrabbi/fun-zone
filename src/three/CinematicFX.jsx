@@ -51,26 +51,43 @@ export function WarpTunnel({ mobile, reduced, progress }) {
 
 export function OrbitCage({ mobile, reduced, heroProgress }) {
   const root = useRef();
-  useFrame((state) => {
-    const t = state.clock.elapsedTime;
+  useFrame((_, delta) => {
+    if (!root.current) return;
     root.current.visible = heroProgress.current < 1;
     if (reduced) return;
-    root.current.children.forEach((ring, i) => {
-      ring.rotation.z = t * (i % 2 ? -0.19 : 0.15) + i * 1.4;
-      ring.rotation.x = 0.9 + Math.sin(t * 0.25 + i) * 0.22;
-      ring.rotation.y = Math.cos(t * 0.2 + i) * 0.2;
-    });
+    // Calm, smooth rotation around its tilted orbital plane
+    root.current.rotation.z += delta * 0.12;
   });
+
   return (
-    <group ref={root} position={[0, mobile ? 0.75 : 1.05, -0.6]} scale={mobile ? 0.75 : 1}>
-      {[0, 1, 2].map((i) => (
-        <mesh key={i} rotation={[1, 0, i]}>
-          <torusGeometry
-            args={[1.9 + i * 0.2, 0.012, 5, mobile ? 64 : 80, Math.PI * (i === 1 ? 1.15 : 0.65)]}
-          />
-          <meshBasicMaterial color={i === 1 ? '#bdff63' : '#b778ff'} transparent opacity={0.75} />
-        </mesh>
-      ))}
+    <group
+      ref={root}
+      position={[0, mobile ? 0.75 : 1.05, -0.4]}
+      rotation={[1.15, 0.22, -0.1]}
+      scale={mobile ? 0.72 : 1}
+    >
+      {/* Clean Inner Neon Cyan Halo */}
+      <mesh>
+        <torusGeometry args={[1.72, 0.009, 12, mobile ? 64 : 96]} />
+        <meshStandardMaterial
+          color="#29d9ff"
+          emissive="#00b4ff"
+          emissiveIntensity={3}
+          transparent
+          opacity={0.8}
+        />
+      </mesh>
+      {/* Clean Outer Cyber Purple Halo */}
+      <mesh>
+        <torusGeometry args={[1.88, 0.006, 12, mobile ? 64 : 96]} />
+        <meshStandardMaterial
+          color="#a773ff"
+          emissive="#8a4bff"
+          emissiveIntensity={2.5}
+          transparent
+          opacity={0.65}
+        />
+      </mesh>
     </group>
   );
 }

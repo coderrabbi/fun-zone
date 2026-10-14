@@ -173,6 +173,7 @@ function Scene({ reduced, mobile }) {
         y: 1 - (e.clientY / innerHeight) * 2,
       };
       if (isDragging.current && !mobile) {
+        window.getSelection()?.removeAllRanges();
         const dx = e.clientX - dragStart.current.x;
         const dy = e.clientY - dragStart.current.y;
         dragStart.current = { x: e.clientX, y: e.clientY };
@@ -186,10 +187,15 @@ function Scene({ reduced, mobile }) {
       if (scrollY < innerHeight && !e.target.closest('button, a, input, select')) {
         isDragging.current = true;
         dragStart.current = { x: e.clientX, y: e.clientY };
+        window.getSelection()?.removeAllRanges();
+        document.body.style.userSelect = 'none';
+        document.body.style.webkitUserSelect = 'none';
       }
     };
     const onUp = () => {
       isDragging.current = false;
+      document.body.style.userSelect = '';
+      document.body.style.webkitUserSelect = '';
     };
 
     if (!mobile) addEventListener('pointermove', move, { passive: true });
@@ -360,12 +366,6 @@ function Scene({ reduced, mobile }) {
           floatIntensity={reduced ? 0 : 0.3}
         >
           <Headset mobile={mobile} />
-          {!mobile && (
-            <group rotation={[Math.PI / 4, 0.3, 0]}>
-              <Ring radius={2.2} color="#29d9ff" tube={0.009} />
-              <Ring radius={2.35} color="#bd7aff" tube={0.007} rotation={[0.5, 0.9, 0]} />
-            </group>
-          )}
         </Float>
       </group>
       <group ref={objects}>
@@ -393,10 +393,6 @@ function Scene({ reduced, mobile }) {
             emissiveIntensity={0.3}
           />
         </mesh>
-        <group position={[0, 1, -1]} rotation={[0.9, 0.1, -0.25]}>
-          <Ring radius={mobile ? 1.85 : 2.65} color="#9b5bff" tube={0.009} mobile={mobile} />
-          {!mobile && <Ring radius={2.8} color="#4c306b" tube={0.006} />}
-        </group>
       </group>
       <group ref={portal} position={[0, 0, -5]}>
         {(mobile ? [0, 1, 2] : [0, 1, 2, 3, 4]).map((i) => (

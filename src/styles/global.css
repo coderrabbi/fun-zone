@@ -203,6 +203,12 @@ section:focus {
   flex-direction: column;
   overflow: hidden;
   background: radial-gradient(ellipse at 50% 33%, #8b4bff0c, transparent 60%);
+  user-select: none;
+  -webkit-user-select: none;
+}
+.hero * {
+  user-select: none;
+  -webkit-user-select: none;
 }
 .hero-topline,
 .hero-bottom {
@@ -1877,7 +1883,7 @@ footer > a:last-child {
 /* --- Hero 3D Badge & Shimmer Highlight --- */
 .hero-3d-badge {
   position: absolute;
-  top: 74%;
+  top: 15px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
