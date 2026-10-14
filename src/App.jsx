@@ -2,11 +2,13 @@ import { lazy, Suspense } from 'react';
 import SceneBoundary from './components/SceneBoundary';
 import Navigation from './components/Navigation';
 import Hero from './sections/Hero';
+import EventVR from './sections/EventVR';
 import { useReducedMotion } from './hooks/usePreferences';
 import Experiences from './sections/Experiences';
 import VR, { Price } from './sections/VR';
 import { Arcade, Racing, Kids } from './sections/PlayZones';
 import { Stats, Why, Cinematic, Gallery, Reviews, Visit, Finale } from './sections/Community';
+import FAQ from './sections/FAQ';
 import { Loader, Effects } from './components/Effects';
 import useChoreography from './animations/useChoreography';
 const World = lazy(() => import('./three/World'));
@@ -55,6 +57,7 @@ export default function App() {
         <Experiences />
         <VR reduced={reduced} />
         <Price />
+        <EventVR />
         <Arcade reduced={reduced} />
         <Racing reduced={reduced} />
         <Kids reduced={reduced} />
@@ -63,6 +66,7 @@ export default function App() {
         <Cinematic />
         <Gallery />
         <Reviews />
+        <FAQ />
         <Visit />
         <Finale />
       </main>

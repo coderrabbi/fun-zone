@@ -27,17 +27,28 @@ export function Tilt({ children, className = '', as: Tag = 'div', ...props }) {
         const r = e.currentTarget.getBoundingClientRect(),
           x = (e.clientX - r.left) / r.width,
           y = (e.clientY - r.top) / r.height;
-        e.currentTarget.style.setProperty('--rx', `${(y - 0.5) * -6}deg`);
-        e.currentTarget.style.setProperty('--ry', `${(x - 0.5) * 7}deg`);
+        const rx = (y - 0.5) * -10;
+        const ry = (x - 0.5) * 12;
+        const angle = Math.atan2(y - 0.5, x - 0.5) * (180 / Math.PI) + 90;
+        e.currentTarget.style.setProperty('--rx', `${rx}deg`);
+        e.currentTarget.style.setProperty('--ry', `${ry}deg`);
         e.currentTarget.style.setProperty('--mx', `${x * 100}%`);
         e.currentTarget.style.setProperty('--my', `${y * 100}%`);
+        e.currentTarget.style.setProperty('--angle', `${angle}deg`);
       }}
       onPointerLeave={(e) => {
         e.currentTarget.style.setProperty('--rx', '0deg');
         e.currentTarget.style.setProperty('--ry', '0deg');
+        e.currentTarget.style.setProperty('--mx', '50%');
+        e.currentTarget.style.setProperty('--my', '50%');
       }}
     >
       {children}
+      <span className="holo-foil" aria-hidden="true" />
+      <span className="cyber-bracket bracket-tl" aria-hidden="true" />
+      <span className="cyber-bracket bracket-tr" aria-hidden="true" />
+      <span className="cyber-bracket bracket-bl" aria-hidden="true" />
+      <span className="cyber-bracket bracket-br" aria-hidden="true" />
     </Tag>
   );
 }

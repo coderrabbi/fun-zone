@@ -5,8 +5,9 @@ const links = [
   ['হোম', 'home'],
   ['এক্সপেরিয়েন্স', 'experiences'],
   ['VR', 'vr'],
-  ['Arcade · Soon', 'arcade'],
+  ['ইভেন্ট VR', 'event-vr'],
   ['Kids · Soon', 'kids'],
+  ['FAQ', 'faq'],
   ['গ্যালারি', 'gallery'],
   ['যোগাযোগ', 'visit'],
 ];

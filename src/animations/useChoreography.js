@@ -82,6 +82,21 @@ export default function useChoreography(reduced) {
         opacity: 0,
         scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 },
       });
+      gsap.to('.label-left', {
+        x: -45,
+        opacity: 0,
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 },
+      });
+      gsap.to('.label-right', {
+        x: 45,
+        opacity: 0,
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 },
+      });
+      gsap.to('.hero-3d-badge', {
+        y: 35,
+        opacity: 0,
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 },
+      });
     });
     const refresh = () => ScrollTrigger.refresh();
     window.addEventListener('load', refresh);

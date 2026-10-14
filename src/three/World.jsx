@@ -23,6 +23,14 @@ function Ring({
 }
 function Headset({ mobile }) {
   const rounded = { smoothness: mobile ? 4 : 5, bevelSegments: mobile ? 3 : 4 };
+  const visor = useRef();
+
+  useFrame(({ clock }) => {
+    if (visor.current) {
+      visor.current.material.emissiveIntensity = 4 + Math.sin(clock.elapsedTime * 4) * 2.5;
+    }
+  });
+
   return (
     <group rotation={[0.15, -0.28, -0.13]}>
       <mesh position={[0, 0.13, -0.2]} rotation={[Math.PI / 2, 0, 0]} scale={[1, 0.75, 1]}>
@@ -51,12 +59,13 @@ function Headset({ mobile }) {
         <meshStandardMaterial color="#0a0815" metalness={0.7} roughness={0.05} />
       </mesh>
       <RoundedBox
+        ref={visor}
         position={[0, -0.29, 0.58]}
         args={[1.13, 0.022, 0.016]}
         radius={0.008}
         {...rounded}
       >
-        <meshStandardMaterial color="#a1eaff" emissive="#008cff" emissiveIntensity={5} />
+        <meshStandardMaterial color="#a1eaff" emissive="#00b4ff" emissiveIntensity={5} />
       </RoundedBox>
       {[-1, 1].map((s) => (
         <RoundedBox
@@ -128,6 +137,12 @@ function Scene({ reduced, mobile }) {
     velocity = useRef(0),
     burst = useRef(0),
     pointer = useRef({ x: 0, y: 0 });
+
+  const dragRotation = useRef({ x: 0, y: 0 });
+  const isDragging = useRef(false);
+  const dragStart = useRef({ x: 0, y: 0 });
+  const dragVelocity = useRef({ x: 0, y: 0 });
+
   const count = reduced ? 80 : mobile ? 160 : 2000;
   const positions = useMemo(() => {
     let a = new Float32Array(count * 3);
@@ -157,17 +172,35 @@ function Scene({ reduced, mobile }) {
         x: (e.clientX / innerWidth) * 2 - 1,
         y: 1 - (e.clientY / innerHeight) * 2,
       };
+      if (isDragging.current && !mobile) {
+        const dx = e.clientX - dragStart.current.x;
+        const dy = e.clientY - dragStart.current.y;
+        dragStart.current = { x: e.clientX, y: e.clientY };
+        dragRotation.current.y += dx * 0.007;
+        dragRotation.current.x += dy * 0.005;
+        dragVelocity.current = { x: dx * 0.007, y: dy * 0.005 };
+      }
     };
-    if (!mobile) addEventListener('pointermove', move, { passive: true });
-    const click = () => {
+    const onDown = (e) => {
       burst.current = 1;
+      if (scrollY < innerHeight && !e.target.closest('button, a, input, select')) {
+        isDragging.current = true;
+        dragStart.current = { x: e.clientX, y: e.clientY };
+      }
     };
+    const onUp = () => {
+      isDragging.current = false;
+    };
+
+    if (!mobile) addEventListener('pointermove', move, { passive: true });
     addEventListener('scroll', f, { passive: true });
-    if (!mobile) addEventListener('pointerdown', click);
+    addEventListener('pointerdown', onDown);
+    addEventListener('pointerup', onUp);
     f();
     return () => {
       removeEventListener('scroll', f);
-      removeEventListener('pointerdown', click);
+      removeEventListener('pointerdown', onDown);
+      removeEventListener('pointerup', onUp);
       removeEventListener('pointermove', move);
     };
   }, [mobile, invalidate]);
@@ -178,6 +211,16 @@ function Scene({ reduced, mobile }) {
     heroProgress.current = heroP;
     const end = Math.max(0, (p - 0.85) / 0.15);
     const k = 1 - Math.exp(-delta * 4);
+
+    if (!isDragging.current) {
+      dragVelocity.current.x *= 0.92;
+      dragVelocity.current.y *= 0.92;
+      dragRotation.current.y += dragVelocity.current.x;
+      dragRotation.current.x += dragVelocity.current.y;
+      dragRotation.current.x = THREE.MathUtils.lerp(dragRotation.current.x, 0, 0.02);
+      dragRotation.current.y = THREE.MathUtils.lerp(dragRotation.current.y, 0, 0.015);
+    }
+
     if (headset.current) {
       headset.current.visible = heroP < 1;
       headset.current.position.y = THREE.MathUtils.lerp(
@@ -188,10 +231,14 @@ function Scene({ reduced, mobile }) {
       headset.current.position.z = reduced || mobile ? 0 : heroP * 3;
       headset.current.rotation.y = THREE.MathUtils.lerp(
         headset.current.rotation.y,
-        reduced ? 0 : pointer.current.x * 0.18 + heroP * 0.8,
+        reduced ? 0 : pointer.current.x * 0.22 + dragRotation.current.y + heroP * 0.8,
         k,
       );
-      headset.current.rotation.x = reduced ? 0 : pointer.current.y * -0.1;
+      headset.current.rotation.x = THREE.MathUtils.lerp(
+        headset.current.rotation.x,
+        reduced ? 0 : pointer.current.y * -0.15 + dragRotation.current.x,
+        k,
+      );
       headset.current.scale.setScalar(mobile ? 0.72 : 1.2);
     }
     if (objects.current) {
@@ -313,6 +360,12 @@ function Scene({ reduced, mobile }) {
           floatIntensity={reduced ? 0 : 0.3}
         >
           <Headset mobile={mobile} />
+          {!mobile && (
+            <group rotation={[Math.PI / 4, 0.3, 0]}>
+              <Ring radius={2.2} color="#29d9ff" tube={0.009} />
+              <Ring radius={2.35} color="#bd7aff" tube={0.007} rotation={[0.5, 0.9, 0]} />
+            </group>
+          )}
         </Float>
       </group>
       <group ref={objects}>

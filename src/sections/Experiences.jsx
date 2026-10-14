@@ -34,7 +34,7 @@ export default function Experiences() {
               key={s.id}
               className={'experience-card reveal card-' + s.id}
               style={{ '--accent': s.color }}
-              data-cursor={s.id === 'vr' ? 'দেখুন' : undefined}
+              data-cursor={s.id === 'vr' ? 'VR দেখুন' : s.name.toUpperCase()}
             >
               {s.image ? (
                 <img src={images[s.image]} alt="" loading="lazy" width="800" height="600" />

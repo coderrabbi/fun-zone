@@ -11,6 +11,7 @@ import {
   MapPin,
   Clock,
   Phone,
+  MessageCircle,
   Star,
   Instagram,
 } from 'lucide-react';
@@ -226,28 +227,39 @@ export function Visit() {
           </div>
         </div>
         <div className="visit-actions">
-          {business.mapUrl ? (
-            <a className="button" href={business.mapUrl} target="_blank" rel="noopener noreferrer">
-              <MapPin size={17} /> Google Maps-এ দেখুন
-            </a>
-          ) : (
-            <button className="button" disabled aria-describedby="contact-note">
-              <MapPin size={17} /> Google Maps-এ দেখুন
-            </button>
-          )}
           {business.phone ? (
-            <a className="button outline" href={'tel:' + business.phone.replace(/[^+\d]/g, '')}>
-              <Phone size={17} /> কল করুন
+            <a
+              className="button button-glow"
+              href={'tel:' + (business.rawPhone || '+8801356198544')}
+              data-cursor="কল করুন"
+            >
+              <Phone size={17} /> কল করুন: {business.phone}
             </a>
           ) : (
             <button className="button outline" disabled aria-describedby="contact-note">
               <Phone size={17} /> কল করুন
             </button>
           )}
+          {business.rawPhone && (
+            <a
+              className="button outline button-whatsapp"
+              href={`https://wa.me/8801356198544?text=${encodeURIComponent('Hello Bakerganj FunVerse, আমি VR Experience সম্পর্কে জানতে চাই।')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor="WhatsApp"
+            >
+              <MessageCircle size={17} /> WhatsApp মেসেজ
+            </a>
+          )}
+          {business.mapUrl ? (
+            <a className="button outline" href={business.mapUrl} target="_blank" rel="noopener noreferrer">
+              <MapPin size={17} /> Google Maps-এ দেখুন
+            </a>
+          ) : null}
         </div>
         {!configured && (
           <p className="asset-note" id="contact-note">
-            ফোন নম্বর ও ম্যাপের পিন শীঘ্রই যুক্ত হবে।
+            ম্যাপের লোকেশন পিন শীঘ্রই যুক্ত হবে।
           </p>
         )}
       </div>
